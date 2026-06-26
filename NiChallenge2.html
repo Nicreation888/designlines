@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protected Page</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    #content {
+      display: none;
+    }
+
+    .login-box {
+      border: 1px solid #ddd;
+      padding: 25px;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="login" class="login-box">
+    <h2>Enter Passcode</h2>
+    <input type="password" id="passcode" placeholder="Passcode" />
+    <br />
+    <button onclick="checkPasscode()">Enter</button>
+    <p id="error" class="error"></p>
+  </div>
+
+  <div id="content">
+    <h1>Welcome</h1>
+    <p>This is the protected content.</p>
+
+    <h2>Private Section</h2>
+    <p>
+      You can place your real HTML content here: text, images, links,
+      downloads, videos, or course materials.
+    </p>
+  </div>
+
+  <script>
+    const correctPasscode = "2026"; // Change this to your passcode
+
+    function checkPasscode() {
+      const entered = document.getElementById("passcode").value;
+
+      if (entered === correctPasscode) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("content").style.display = "block";
+      } else {
+        document.getElementById("error").textContent = "Incorrect passcode. Please try again.";
+      }
+    }
+
+    // Optional: allow pressing Enter
+    document.getElementById("passcode").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkPasscode();
+      }
+    });
+  </script>
+
+</body>
+</html>
