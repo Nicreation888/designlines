@@ -89,40 +89,48 @@
     <div id="result"></div>
   </div>
 
-  <script>
-    function checkCode() {
-      const code = document.getElementById("codeInput").value.trim().toUpperCase();
-      const result = document.getElementById("result");
+ <script>
+const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmMlzNHXTVuwAYGYwLpEBvj-7CCpWdNbTAoVUwVdoPonP-fvQGjFGwH0G5M1kMt2ZxGeJvvTfrYlU6/pub?output=csv";
 
-      const vaults = {
-        "103222AB": {
-          title: "Week 2 Treasure Unlocked!",
-          message: "The Second Lost Treasure is hidden in Liam's closet, on the top shelf."
-        },
-        "O58ABC": {
-          title: "Week 3 Treasure Unlocked!",
-          message: "The Third Lost Treasure is hidden behind the family bookshelf, on the middle shelf, behind photobooks."
-        },
-        "CAT10012B4": {
-          title: "Final Treasure Vault Unlocked!",
-          message: "The Final Lost Treasure is hidden inside Pantry, Top-SHelf."
-        }
-      };
+async function checkCode() {
+  const code = document.getElementById("codeInput").value.trim().toUpperCase();
+  const result = document.getElementById("result");
 
-      if (vaults[code]) {
-        result.className = "success";
-        result.innerHTML =
-          "✅ <strong>Access Granted, Agent Liam!</strong><br><br>" +
-          "<strong>" + vaults[code].title + "</strong><br>" +
-          vaults[code].message +
-          "<br><br>Great work! Don't forget to tell Dad what you found.";
-      } else {
-        result.className = "error";
-        result.innerHTML =
-          "❌ Access Denied.<br>" +
-          "Check your code and try again, Agent Liam.";
-      }
+  try {
+    const response = await fetch(sheetUrl);
+    const csvText = await response.text();
+
+    const rows = csvText.trim().split("\n").map(row => row.split(","));
+    const headers = rows[0].map(h => h.trim());
+
+    const data = rows.slice(1).map(row => {
+      let item = {};
+      headers.forEach((header, index) => {
+        item[header] = row[index] ? row[index].trim() : "";
+      });
+      return item;
+    });
+
+    const match = data.find(item => item.passcode.toUpperCase() === code);
+
+    if (match) {
+      result.className = "success";
+      result.innerHTML =
+        "✅ <strong>Access Granted, Agent Liam!</strong><br><br>" +
+        "<strong>" + match.title + "</strong><br>" +
+        match.hiddenPlace + "<br><br>" +
+        match.message;
+    } else {
+      result.className = "error";
+      result.innerHTML =
+        "❌ Access Denied.<br>Check your code and try again, Agent Liam.";
     }
-  </script>
+  } catch (error) {
+    result.className = "error";
+    result.innerHTML =
+      "⚠️ Vault system error. Please ask Dad to check the Google Sheet link.";
+  }
+}
+</script>
 </body>
 </html>
