@@ -1,93 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Protected Page</title>
-
+  <meta charset="UTF-8">
+  <title>Agent Liam's Secret Vault</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 60px auto;
-      padding: 20px;
-      line-height: 1.6;
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+  padding: 40px;
+
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.75)
+    ),
+    url("vault.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+    .vault-box {
+       background: rgba(31, 41, 55, 0.88);
+  max-width: 500px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.7);
     }
 
-    #content {
-      display: none;
-    }
-
-    .login-box {
-      border: 1px solid #ddd;
-      padding: 25px;
-      border-radius: 8px;
-      max-width: 400px;
-      margin: auto;
-      text-align: center;
+    h1 {
+      color: #facc15;
     }
 
     input {
+      font-size: 20px;
       padding: 10px;
       width: 80%;
-      margin: 10px 0;
-      font-size: 16px;
+      text-align: center;
+      border-radius: 8px;
+      border: none;
+      margin-top: 15px;
     }
 
     button {
+      font-size: 18px;
       padding: 10px 20px;
-      font-size: 16px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #22c55e;
+      color: white;
       cursor: pointer;
     }
 
+    button:hover {
+      background: #16a34a;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .success {
+      color: #86efac;
+    }
+
     .error {
-      color: red;
-      margin-top: 10px;
+      color: #fca5a5;
     }
   </style>
 </head>
 
 <body>
+  <div class="vault-box">
+    <h1>🔐 Agent Liam's Secret Vault</h1>
 
-  <div id="login" class="login-box">
-    <h2>Enter Passcode</h2>
-    <input type="password" id="passcode" placeholder="Passcode" />
-    <br />
-    <button onclick="checkPasscode()">Enter</button>
-    <p id="error" class="error"></p>
-  </div>
+    <p>Enter your mission passcode to unlock the hidden treasure location.</p>
 
-  <div id="content">
-    <h1>Welcome</h1>
-    <p>This is the protected content.</p>
+    <input type="text" id="codeInput" placeholder="Enter passcode here">
+    <br>
+    <button onclick="checkCode()">Unlock Vault</button>
 
-    <h2>Private Section</h2>
-    <p>
-      Liam's Closet --- Top Shelf.
-    </p>
+    <div id="result"></div>
   </div>
 
   <script>
-    const correctPasscode = "103222AB"; // Change this to your passcode
+    function checkCode() {
+      const code = document.getElementById("codeInput").value.trim().toUpperCase();
+      const result = document.getElementById("result");
 
-    function checkPasscode() {
-      const entered = document.getElementById("passcode").value;
+      const vaults = {
+        "103222AB": {
+          title: "Week 2 Treasure Unlocked!",
+          message: "The Second Lost Treasure is hidden in Liam's closet, on the top shelf."
+        },
+        "O58ABC": {
+          title: "Week 3 Treasure Unlocked!",
+          message: "The Third Lost Treasure is hidden behind the family bookshelf, on the middle shelf, behind photobooks."
+        },
+        "CAT10012B4": {
+          title: "Final Treasure Vault Unlocked!",
+          message: "The Final Lost Treasure is hidden inside Pantry, Top-SHelf."
+        }
+      };
 
-      if (entered === correctPasscode) {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("content").style.display = "block";
+      if (vaults[code]) {
+        result.className = "success";
+        result.innerHTML =
+          "✅ <strong>Access Granted, Agent Liam!</strong><br><br>" +
+          "<strong>" + vaults[code].title + "</strong><br>" +
+          vaults[code].message +
+          "<br><br>Great work! Don't forget to tell Dad what you found.";
       } else {
-        document.getElementById("error").textContent = "Incorrect passcode. Please try again.";
+        result.className = "error";
+        result.innerHTML =
+          "❌ Access Denied.<br>" +
+          "Check your code and try again, Agent Liam.";
       }
     }
-
-    // Optional: allow pressing Enter
-    document.getElementById("passcode").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        checkPasscode();
-      }
-    });
   </script>
-
 </body>
 </html>
