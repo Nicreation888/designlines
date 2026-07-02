@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Agent Ni's Secret Vault</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+  padding: 40px;
+
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.75)
+    ),
+    url("Vault.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+    .vault-box {
+       background: rgba(31, 41, 55, 0.88);
+  max-width: 500px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.7);
+    }
+
+    h1 {
+      color: #facc15;
+    }
+
+    input {
+      font-size: 20px;
+      padding: 10px;
+      width: 80%;
+      text-align: center;
+      border-radius: 8px;
+      border: none;
+      margin-top: 15px;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #22c55e;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .success {
+      color: #86efac;
+    }
+
+    .error {
+      color: #fca5a5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="vault-box">
+    <h1>🔐 Agent Dr. Ni's Secret Vault</h1>
+
+    <p>Enter your mission passcode to unlock the hidden treasure location.</p>
+
+    <input type="text" id="codeInput" placeholder="Enter passcode here">
+    <br>
+    <button onclick="checkCode()">Unlock Vault</button>
+
+    <div id="result"></div>
+  </div>
+
+ <script>
+const scriptUrl = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+async function checkCode() {
+  const code = document.getElementById("codeInput").value.trim().toUpperCase();
+  const result = document.getElementById("result");
+
+  try {
+    const response = await fetch(scriptUrl + "?code=" + encodeURIComponent(code));
+    const data = await response.json();
+
+    if (data.success) {
+      result.className = "success";
+      result.innerHTML =
+        "✅ <strong>Access Granted, Agent Liam!</strong><br><br>" +
+        "<strong>" + data.title + "</strong><br>" +
+        data.place + "<br><br>" +
+        data.message;
+    } else {
+      result.className = "error";
+      result.innerHTML =
+        "❌ Access Denied.<br>Check your code and try again, Agent Liam.";
+    }
+  } catch (error) {
+    result.className = "error";
+    result.innerHTML =
+      "⚠️ Vault system error. Please ask Dad to check the setup.";
+  }
+}
+
+document.getElementById("codeInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    checkCode();
+  }
+});
+</script>
+</body>
+</html>
